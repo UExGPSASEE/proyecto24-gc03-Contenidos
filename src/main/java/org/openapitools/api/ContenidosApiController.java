@@ -1,7 +1,7 @@
 package org.openapitools.api;
 
 import org.openapitools.model.Contenido;
-
+import org.openapitools.services.ContenidoDBService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,11 +30,12 @@ import javax.annotation.Generated;
 @Controller
 @RequestMapping("${openapi.aPIContenidos.base-path:/StreamHub}")
 public class ContenidosApiController implements ContenidosApi {
-
+    private final ContenidoDBService contenidoDBService;
     private final NativeWebRequest request;
 
     @Autowired
-    public ContenidosApiController(NativeWebRequest request) {
+    public ContenidosApiController(ContenidoDBService contenidoDBService, NativeWebRequest request) {
+        this.contenidoDBService = contenidoDBService;
         this.request = request;
     }
 
@@ -43,4 +44,10 @@ public class ContenidosApiController implements ContenidosApi {
         return Optional.ofNullable(request);
     }
 
+    //Modificar el método para que devuelva una lista de contenidos y una respuesta válida
+    @Override
+    public ResponseEntity<List<Contenido>> contenidosGet() {
+        contenidoDBService.printAllContenidos();
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+    }
 }
