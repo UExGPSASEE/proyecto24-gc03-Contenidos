@@ -1,25 +1,29 @@
 package org.openapitools.modelDB;
 
+import org.openapitools.model.Contenido;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "Contenido")
 public class ContenidoDB {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String tipo;
     private String titulo;
-    private Integer production_year;
+    @Column (name = "production_year")
+    private Integer productionYear;
 
     @Column (name = "clasificacion_edad")
     private String clasificacionEdad;
 
     private String descripcion;
 
-    @Column (name = "pertenece_a")
-    private Integer perteneceA;
+    // Relación con la tabla Contenido
+    @Column(name = "pertenece_a")
+    private Integer  perteneceA;
 
     @Column (name = "numero_elementos")
     private Integer numeroElementos;
@@ -27,8 +31,33 @@ public class ContenidoDB {
     private Integer duracion;
     private String url;
 
-    protected ContenidoDB() {
+    public ContenidoDB() {
         // Empty constructor
+    }
+
+    public ContenidoDB( String tipo, String titulo, Integer production_year, String clasificacionEdad, String descripcion, int perteneceA, Integer numeroElementos, Integer duracion, String url) {
+        this.tipo = tipo;
+        this.titulo = titulo;
+        this.productionYear = production_year;
+        this.clasificacionEdad = clasificacionEdad;
+        this.descripcion = descripcion;
+        this.perteneceA = perteneceA;
+        this.numeroElementos = numeroElementos;
+        this.duracion = duracion;
+        this.url = url;
+    }
+
+    public ContenidoDB(Contenido contenido){
+        this.tipo = contenido.getTipo().toString();
+        this.titulo = contenido.getTitulo();
+        this.productionYear = contenido.getProductionYear();
+        this.clasificacionEdad = contenido.getClasificacionEdad();
+        this.descripcion = contenido.getDescripcion();
+        this.numeroElementos = contenido.getNumeroElementos();
+        this.duracion = contenido.getDuracion();
+        this.url = contenido.getUrl();
+        this.perteneceA =   contenido.getPerteneceA();
+
     }
 
     // Getters and Setters
@@ -36,9 +65,6 @@ public class ContenidoDB {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getTipo() {
         return tipo;
@@ -56,12 +82,11 @@ public class ContenidoDB {
         this.titulo = titulo;
     }
 
-    public Integer getProduction_year() {
-        return production_year;
+    public Integer getProductionYear() {
+        return productionYear;
     }
-
-    public void setProduction_year(Integer production_year) {
-        this.production_year = production_year;
+    public void setProductionYear(Integer production_year) {
+        this.productionYear = production_year;
     }
 
     public String getClasificacionEdad() {
@@ -118,7 +143,7 @@ public class ContenidoDB {
                 "id=" + id +
                 ", tipo='" + tipo + '\'' +
                 ", titulo='" + titulo + '\'' +
-                ", production_year=" + production_year +
+                ", production_year=" + productionYear +
                 ", clasificacionEdad='" + clasificacionEdad + '\'' +
                 ", descripcion='" + descripcion + '\'' +
                 ", perteneceA=" + perteneceA +
