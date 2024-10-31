@@ -10,6 +10,7 @@ import java.time.OffsetDateTime;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.openapitools.modelDB.ContenidoDB;
 
 
 import java.util.*;
@@ -85,9 +86,26 @@ public class Contenido {
 
   private String url;
 
+  public Contenido() {
+    //Empty constructor
+  }
   public Contenido id(Integer id) {
     this.id = id;
     return this;
+  }
+
+
+  public Contenido (ContenidoDB contenidoDB){
+    this.id = contenidoDB.getId();
+    this.tipo = TipoEnum.fromValue(contenidoDB.getTipo());
+    this.titulo = contenidoDB.getTitulo();
+    this.productionYear = contenidoDB.getProductionYear();
+    this.clasificacionEdad = contenidoDB.getClasificacionEdad();
+    this.descripcion = contenidoDB.getDescripcion();
+    this.perteneceA = contenidoDB.getPerteneceA();
+    this.numeroElementos = contenidoDB.getNumeroElementos();
+    this.duracion = contenidoDB.getDuracion();
+    this.url = contenidoDB.getUrl();
   }
 
   /**

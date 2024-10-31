@@ -1,7 +1,8 @@
 package org.openapitools.api;
 
+import org.openapitools.exceptions.CustomServiceException;
 import org.openapitools.model.Contenido;
-
+import org.openapitools.services.ContenidoDBService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,11 +31,12 @@ import javax.annotation.Generated;
 @Controller
 @RequestMapping("${openapi.aPIContenidos.base-path:/StreamHub}")
 public class ContenidosApiController implements ContenidosApi {
-
+    private final ContenidoDBService contenidoDBService;
     private final NativeWebRequest request;
 
     @Autowired
-    public ContenidosApiController(NativeWebRequest request) {
+    public ContenidosApiController(ContenidoDBService contenidoDBService, NativeWebRequest request) {
+        this.contenidoDBService = contenidoDBService;
         this.request = request;
     }
 
@@ -43,4 +45,81 @@ public class ContenidosApiController implements ContenidosApi {
         return Optional.ofNullable(request);
     }
 
+    //Devolver todos los contenidos
+    @Override
+    public ResponseEntity<List<Contenido>> contenidosGet() {
+        List<Contenido> contenidosList = contenidoDBService.getAllContenidos();
+        return ResponseEntity.ok(contenidosList);
+    }
+
+    //Eliminar un contenido pasado su id
+    @Override
+    public ResponseEntity<Void> contenidosIdDeContenidoDelete(Integer idDeContenido) {
+        boolean borrado = contenidoDBService.deleteContenidoById(idDeContenido);
+        if (borrado) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    //Devolver un contenido por su id
+    @Override
+    public ResponseEntity<Contenido> contenidosIdDeContenidoGet(Integer idDeContenido) {
+        Optional<Contenido> contenidoOptional = contenidoDBService.getContenidoById(idDeContenido);
+        if (contenidoOptional.isPresent()) {
+            return ResponseEntity.ok(contenidoOptional.get());
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    //Actualizar un contenido pasado su id
+    @Override
+    public ResponseEntity<Void> contenidosIdDeContenidoPut(Integer idDeContenido, Contenido contenido) {
+        boolean actualizado = false;
+        try{
+            actualizado = contenidoDBService.putContenido(idDeContenido, contenido);
+        }catch(CustomServiceException e){
+            e.printStackTrace();
+            //Lanzamos bad request(400) si se ha intentado acutalizar un obtenido y se ha
+            //incumplido la integridad referencial
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        if (actualizado) {
+            //Si se ha actualizado correctamente devolvemos un NO_CONTENT
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            //Si no se ha encontrado el contenido devolvemos un NOT_FOUND
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    //Crear un contenido
+    @Override
+    public ResponseEntity<Void> contenidosPost(Contenido contenido) {
+        try {
+            contenidoDBService.postContenido(contenido);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (CustomServiceException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    //Devolver los contenidos de un tipo concreto
+    @Override
+    public ResponseEntity<List<Contenido>> contenidosTipoTipoDeContenidoGet(String tipoDeContenido) {
+        List<Contenido> contenidosList = contenidoDBService.getContenidosByTipo(tipoDeContenido);
+        return ResponseEntity.ok(contenidosList);
+    }
+
+    //Devolver la url de un contenido por su id
+    @Override
+    public ResponseEntity<String> contenidosVisualizarIdDeContenidoGet(Integer idDeContenido) {
+        String url = contenidoDBService.visualizarContenidoById(idDeContenido);
+        if(url != null)
+            return  ResponseEntity.ok(url);
+        else
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 }
