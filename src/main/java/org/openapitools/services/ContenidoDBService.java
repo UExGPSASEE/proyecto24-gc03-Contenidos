@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -63,6 +61,23 @@ public class ContenidoDBService {
         return contenidoDBOptional.map(this::convertToContenido);
     }
 
+    public List<Contenido> getContenidoByEtiquetaIds(List<Integer> etiquetaIds) {
+        // Obtiene la lista de ContenidoDB que tiene las etiquetas solicitadas
+        List<ContenidoDB> listaContenidosDB = contenidoDBRepository.findByEtiquetaIdsIn(etiquetaIds);
+
+        // Usa un Set para almacenar contenidos únicos
+        Set<Contenido> contenidoSet = new HashSet<>();
+
+        // Convierte cada ContenidoDB a Contenido y los añade al Set
+        for (ContenidoDB contenidoDB : listaContenidosDB) {
+            contenidoSet.add(convertToContenido(contenidoDB));
+        }
+
+        // Convierte el Set de vuelta a una lista y la devuelve
+        return new ArrayList<>(contenidoSet);
+    }
+
+
     //Actualizar un contenido por ID
     public boolean putContenido(Integer id, Contenido contenido) {
         ContenidoDB contenidoDB = new ContenidoDB(contenido);
@@ -80,6 +95,7 @@ public class ContenidoDBService {
             updatedContenidoDB.setNumeroElementos(contenidoDB.getNumeroElementos());
             updatedContenidoDB.setDuracion(contenidoDB.getDuracion());
             updatedContenidoDB.setUrl(contenidoDB.getUrl());
+            updatedContenidoDB.setEtiquetaIds(contenidoDB.getEtiquetaIds());
 
             //Llamamos al método saveContenidoDB para guardar el contenido actualizado comprobando la integridad referencial
             try {
