@@ -5,6 +5,7 @@
  */
 package org.openapitools.api;
 
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.openapitools.model.Contenido;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,245 +38,151 @@ import javax.annotation.Generated;
 @Tag(name = "Contenidos", description = "Operaciones relacionadas el contenido multimedia.")
 public interface ContenidosApi {
 
-    default Optional<NativeWebRequest> getRequest() {
-        return Optional.empty();
-    }
+	default Optional<NativeWebRequest> getRequest() {
+		return Optional.empty();
+	}
 
-    /**
-     * GET /contenidos : Devuelve todos los contenidos.
-     *
-     * @return Lista de contenidos devuelta correctamente. (status code 200)
-     */
-    @Operation(
-        operationId = "contenidosGet",
-        summary = "Devuelve todos los contenidos.",
-        tags = { "Contenidos" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Lista de contenidos devuelta correctamente.", content = {
-                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Contenido.class)))
-            })
-        }
-    )
-    @RequestMapping(
-        method = RequestMethod.GET,
-        value = "/contenidos",
-        produces = { "application/json" }
-    )
-    
-    default ResponseEntity<List<Contenido>> contenidosGet() {
+	/**
+	 * GET /contenidos : Devuelve todos los contenidos.
+	 *
+	 * @return Lista de contenidos devuelta correctamente. (status code 200)
+	 */
+	@Operation(operationId = "contenidosGet", summary = "Devuelve todos los contenidos.", tags = {"Contenidos"}, responses = {@ApiResponse(responseCode = "200", description = "Lista de contenidos devuelta correctamente.", content = {@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Contenido.class)))})})
+	@RequestMapping(method = RequestMethod.GET, value = "/contenidos", produces = {"application/json"})
 
-        getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "[ { \"clasificacion_edad\" : \"clasificacion_edad\", \"descripcion\" : \"descripcion\", \"tipo\" : \"Pelicula\", \"pertenece_a\" : 1, \"titulo\" : \"titulo\", \"duracion\" : 5, \"id\" : 0, \"url\" : \"url\", \"production_year\" : 6, \"numero_elementos\" : 5 }, { \"clasificacion_edad\" : \"clasificacion_edad\", \"descripcion\" : \"descripcion\", \"tipo\" : \"Pelicula\", \"pertenece_a\" : 1, \"titulo\" : \"titulo\", \"duracion\" : 5, \"id\" : 0, \"url\" : \"url\", \"production_year\" : 6, \"numero_elementos\" : 5 } ]";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                    break;
-                }
-            }
-        });
+	default ResponseEntity<List<Contenido>> contenidosGet() {
 
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+		getRequest().ifPresent(request -> {
+			for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+				if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+					String exampleString = "[ { \"clasificacion_edad\" : \"clasificacion_edad\", \"descripcion\" : \"descripcion\", \"tipo\" : \"Pelicula\", \"pertenece_a\" : 1, \"titulo\" : \"titulo\", \"duracion\" : 5, \"id\" : 0, \"url\" : \"url\", \"production_year\" : 6, \"numero_elementos\" : 5 }, { \"clasificacion_edad\" : \"clasificacion_edad\", \"descripcion\" : \"descripcion\", \"tipo\" : \"Pelicula\", \"pertenece_a\" : 1, \"titulo\" : \"titulo\", \"duracion\" : 5, \"id\" : 0, \"url\" : \"url\", \"production_year\" : 6, \"numero_elementos\" : 5 } ]";
+					ApiUtil.setExampleResponse(request, "application/json", exampleString);
+					break;
+				}
+			}
+		});
 
-    }
+		return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+	}
+
+	@Operation(summary = "Devuelve los contenidos que corresponden a un conjunto de etiquetas.", description = "", tags = {"Contenidos"})
+	@RequestMapping(value = "/contenidos/etiquetas", produces = {"application/json"}, method = RequestMethod.GET)
+	default ResponseEntity<List<Contenido>> contenidosEtiquetasGet(@NotNull @Parameter(in = ParameterIn.QUERY, description = "Array de IDs de etiquetas para filtrar los contenidos.", required = true, schema = @Schema()) @Valid @RequestParam(value = "etiquetas", required = true) List<Integer> etiquetas) {
+		return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+	}
 
 
-    /**
-     * DELETE /contenidos/{id_de_contenido} : Borra un contenido específico.
-     *
-     * @param idDeContenido  (required)
-     * @return Contenido borrado correctamente. (status code 200)
-     *         or Contenido no encontrado. (status code 404)
-     */
-    @Operation(
-        operationId = "contenidosIdDeContenidoDelete",
-        summary = "Borra un contenido específico.",
-        tags = { "Contenidos" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Contenido borrado correctamente."),
-            @ApiResponse(responseCode = "404", description = "Contenido no encontrado.")
-        }
-    )
-    @RequestMapping(
-        method = RequestMethod.DELETE,
-        value = "/contenidos/{id_de_contenido}"
-    )
-    
-    default ResponseEntity<Void> contenidosIdDeContenidoDelete(
-        @Parameter(name = "id_de_contenido", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id_de_contenido") Integer idDeContenido
-    ) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+	/**
+	 * DELETE /contenidos/{id_de_contenido} : Borra un contenido específico.
+	 *
+	 * @param idDeContenido (required)
+	 * @return Contenido borrado correctamente. (status code 200)
+	 * or Contenido no encontrado. (status code 404)
+	 */
+	@Operation(operationId = "contenidosIdDeContenidoDelete", summary = "Borra un contenido específico.", tags = {"Contenidos"}, responses = {@ApiResponse(responseCode = "200", description = "Contenido borrado correctamente."), @ApiResponse(responseCode = "404", description = "Contenido no encontrado.")})
+	@RequestMapping(method = RequestMethod.DELETE, value = "/contenidos/{id_de_contenido}")
 
-    }
+	default ResponseEntity<Void> contenidosIdDeContenidoDelete(@Parameter(name = "id_de_contenido", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id_de_contenido") Integer idDeContenido) {
+		return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
-    /**
-     * GET /contenidos/{id_de_contenido} : Devuelve los detalles de un contenido.
-     *
-     * @param idDeContenido  (required)
-     * @return Detalles del contenido. (status code 200)
-     *         or Contenido no encontrado. (status code 404)
-     */
-    @Operation(
-        operationId = "contenidosIdDeContenidoGet",
-        summary = "Devuelve los detalles de un contenido.",
-        tags = { "Contenidos" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Detalles del contenido.", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = Contenido.class))
-            }),
-            @ApiResponse(responseCode = "404", description = "Contenido no encontrado.")
-        }
-    )
-    @RequestMapping(
-        method = RequestMethod.GET,
-        value = "/contenidos/{id_de_contenido}",
-        produces = { "application/json" }
-    )
-    
-    default ResponseEntity<Contenido> contenidosIdDeContenidoGet(
-        @Parameter(name = "id_de_contenido", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id_de_contenido") Integer idDeContenido
-    ) {
-        getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"clasificacion_edad\" : \"clasificacion_edad\", \"descripcion\" : \"descripcion\", \"tipo\" : \"Pelicula\", \"pertenece_a\" : 1, \"titulo\" : \"titulo\", \"duracion\" : 5, \"id\" : 0, \"url\" : \"url\", \"production_year\" : 6, \"numero_elementos\" : 5 }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                    break;
-                }
-            }
-        });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+	}
 
-    }
+	/**
+	 * GET /contenidos/{id_de_contenido} : Devuelve los detalles de un contenido.
+	 *
+	 * @param idDeContenido (required)
+	 * @return Detalles del contenido. (status code 200)
+	 * or Contenido no encontrado. (status code 404)
+	 */
+	@Operation(operationId = "contenidosIdDeContenidoGet", summary = "Devuelve los detalles de un contenido.", tags = {"Contenidos"}, responses = {@ApiResponse(responseCode = "200", description = "Detalles del contenido.", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Contenido.class))}), @ApiResponse(responseCode = "404", description = "Contenido no encontrado.")})
+	@RequestMapping(method = RequestMethod.GET, value = "/contenidos/{id_de_contenido}", produces = {"application/json"})
+
+	default ResponseEntity<Contenido> contenidosIdDeContenidoGet(@Parameter(name = "id_de_contenido", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id_de_contenido") Integer idDeContenido) {
+		getRequest().ifPresent(request -> {
+			for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+				if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+					String exampleString = "{ \"clasificacion_edad\" : \"clasificacion_edad\", \"descripcion\" : \"descripcion\", \"tipo\" : \"Pelicula\", \"pertenece_a\" : 1, \"titulo\" : \"titulo\", \"duracion\" : 5, \"id\" : 0, \"url\" : \"url\", \"production_year\" : 6, \"numero_elementos\" : 5 }";
+					ApiUtil.setExampleResponse(request, "application/json", exampleString);
+					break;
+				}
+			}
+		});
+		return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+	}
 
 
-    /**
-     * PUT /contenidos/{id_de_contenido} : Actualiza los datos de un contenido.
-     *
-     * @param idDeContenido  (required)
-     * @param contenido  (required)
-     * @return Contenido actualizado correctamente. (status code 200)
-     *         or Datos inválidos proporcionados. (status code 400)
-     */
-    @Operation(
-        operationId = "contenidosIdDeContenidoPut",
-        summary = "Actualiza los datos de un contenido.",
-        tags = { "Contenidos" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Contenido actualizado correctamente."),
-            @ApiResponse(responseCode = "400", description = "Datos inválidos proporcionados.")
-        }
-    )
-    @RequestMapping(
-        method = RequestMethod.PUT,
-        value = "/contenidos/{id_de_contenido}",
-        consumes = { "application/json" }
-    )
-    
-    default ResponseEntity<Void> contenidosIdDeContenidoPut(
-        @Parameter(name = "id_de_contenido", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id_de_contenido") Integer idDeContenido,
-        @Parameter(name = "Contenido", description = "", required = true) @Valid @RequestBody Contenido contenido
-    ) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+	/**
+	 * PUT /contenidos/{id_de_contenido} : Actualiza los datos de un contenido.
+	 *
+	 * @param idDeContenido (required)
+	 * @param contenido     (required)
+	 * @return Contenido actualizado correctamente. (status code 200)
+	 * or Datos inválidos proporcionados. (status code 400)
+	 */
+	@Operation(operationId = "contenidosIdDeContenidoPut", summary = "Actualiza los datos de un contenido.", tags = {"Contenidos"}, responses = {@ApiResponse(responseCode = "200", description = "Contenido actualizado correctamente."), @ApiResponse(responseCode = "400", description = "Datos inválidos proporcionados.")})
+	@RequestMapping(method = RequestMethod.PUT, value = "/contenidos/{id_de_contenido}", consumes = {"application/json"})
 
-    }
+	default ResponseEntity<Void> contenidosIdDeContenidoPut(@Parameter(name = "id_de_contenido", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id_de_contenido") Integer idDeContenido, @Parameter(name = "Contenido", description = "", required = true) @Valid @RequestBody Contenido contenido) {
+		return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+	}
 
 
-    /**
-     * POST /contenidos : Crea un contenido nuevo.
-     *
-     * @param contenido  (required)
-     * @return Contenido creado correctamente. (status code 201)
-     *         or Datos inválidos proporcionados. (status code 400)
-     */
-    @Operation(
-        operationId = "contenidosPost",
-        summary = "Crea un contenido nuevo.",
-        tags = { "Contenidos" },
-        responses = {
-            @ApiResponse(responseCode = "201", description = "Contenido creado correctamente."),
-            @ApiResponse(responseCode = "400", description = "Datos inválidos proporcionados.")
-        }
-    )
-    @RequestMapping(
-        method = RequestMethod.POST,
-        value = "/contenidos",
-        consumes = { "application/json" }
-    )
-    
-    default ResponseEntity<Void> contenidosPost(
-        @Parameter(name = "Contenido", description = "", required = true) @Valid @RequestBody Contenido contenido
-    ) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+	/**
+	 * POST /contenidos : Crea un contenido nuevo.
+	 *
+	 * @param contenido (required)
+	 * @return Contenido creado correctamente. (status code 201)
+	 * or Datos inválidos proporcionados. (status code 400)
+	 */
+	@Operation(operationId = "contenidosPost", summary = "Crea un contenido nuevo.", tags = {"Contenidos"}, responses = {@ApiResponse(responseCode = "201", description = "Contenido creado correctamente."), @ApiResponse(responseCode = "400", description = "Datos inválidos proporcionados.")})
+	@RequestMapping(method = RequestMethod.POST, value = "/contenidos", consumes = {"application/json"})
 
-    }
+	default ResponseEntity<Void> contenidosPost(@Parameter(name = "Contenido", description = "", required = true) @Valid @RequestBody Contenido contenido) {
+		return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+	}
 
 
-    /**
-     * GET /contenidos/tipo/{tipo_de_contenido} : Devuelve todos los contenidos del tipo indicado.
-     *
-     * @param tipoDeContenido  (required)
-     * @return Lista de contenidos por tipo. (status code 200)
-     *         or Tipo inválido. (status code 400)
-     */
-    @Operation(
-        operationId = "contenidosTipoTipoDeContenidoGet",
-        summary = "Devuelve todos los contenidos del tipo indicado.",
-        tags = { "Contenidos" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Lista de contenidos por tipo.", content = {
-                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Contenido.class)))
-            }),
-            @ApiResponse(responseCode = "400", description = "Tipo inválido.")
-        }
-    )
-    @RequestMapping(
-        method = RequestMethod.GET,
-        value = "/contenidos/tipo/{tipo_de_contenido}",
-        produces = { "application/json" }
-    )
-    
-    default ResponseEntity<List<Contenido>> contenidosTipoTipoDeContenidoGet(
-        @Parameter(name = "tipo_de_contenido", description = "", required = true, in = ParameterIn.PATH) @PathVariable("tipo_de_contenido") String tipoDeContenido
-    ) {
-        getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "[ { \"clasificacion_edad\" : \"clasificacion_edad\", \"descripcion\" : \"descripcion\", \"tipo\" : \"Pelicula\", \"pertenece_a\" : 1, \"titulo\" : \"titulo\", \"duracion\" : 5, \"id\" : 0, \"url\" : \"url\", \"production_year\" : 6, \"numero_elementos\" : 5 }, { \"clasificacion_edad\" : \"clasificacion_edad\", \"descripcion\" : \"descripcion\", \"tipo\" : \"Pelicula\", \"pertenece_a\" : 1, \"titulo\" : \"titulo\", \"duracion\" : 5, \"id\" : 0, \"url\" : \"url\", \"production_year\" : 6, \"numero_elementos\" : 5 } ]";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                    break;
-                }
-            }
-        });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-    }
+	/**
+	 * GET /contenidos/tipo/{tipo_de_contenido} : Devuelve todos los contenidos del tipo indicado.
+	 *
+	 * @param tipoDeContenido (required)
+	 * @return Lista de contenidos por tipo. (status code 200)
+	 * or Tipo inválido. (status code 400)
+	 */
+	@Operation(operationId = "contenidosTipoTipoDeContenidoGet", summary = "Devuelve todos los contenidos del tipo indicado.", tags = {"Contenidos"}, responses = {@ApiResponse(responseCode = "200", description = "Lista de contenidos por tipo.", content = {@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Contenido.class)))}), @ApiResponse(responseCode = "400", description = "Tipo inválido.")})
+	@RequestMapping(method = RequestMethod.GET, value = "/contenidos/tipo/{tipo_de_contenido}", produces = {"application/json"})
+
+	default ResponseEntity<List<Contenido>> contenidosTipoTipoDeContenidoGet(@Parameter(name = "tipo_de_contenido", description = "", required = true, in = ParameterIn.PATH) @PathVariable("tipo_de_contenido") String tipoDeContenido) {
+		getRequest().ifPresent(request -> {
+			for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+				if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+					String exampleString = "[ { \"clasificacion_edad\" : \"clasificacion_edad\", \"descripcion\" : \"descripcion\", \"tipo\" : \"Pelicula\", \"pertenece_a\" : 1, \"titulo\" : \"titulo\", \"duracion\" : 5, \"id\" : 0, \"url\" : \"url\", \"production_year\" : 6, \"numero_elementos\" : 5 }, { \"clasificacion_edad\" : \"clasificacion_edad\", \"descripcion\" : \"descripcion\", \"tipo\" : \"Pelicula\", \"pertenece_a\" : 1, \"titulo\" : \"titulo\", \"duracion\" : 5, \"id\" : 0, \"url\" : \"url\", \"production_year\" : 6, \"numero_elementos\" : 5 } ]";
+					ApiUtil.setExampleResponse(request, "application/json", exampleString);
+					break;
+				}
+			}
+		});
+		return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+	}
 
 
-    /**
-     * GET /contenidos/visualizar/{id_de_contenido} : Inicia el streaming del contenido.
-     *
-     * @param idDeContenido  (required)
-     * @return Streaming iniciado. (status code 200)
-     *         or Contenido no encontrado. (status code 404)
-     */
-    @Operation(
-        operationId = "contenidosVisualizarIdDeContenidoGet",
-        summary = "Inicia el streaming del contenido.",
-        tags = { "Contenidos" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Streaming iniciado."),
-            @ApiResponse(responseCode = "404", description = "Contenido no encontrado.")
-        }
-    )
-    @RequestMapping(
-        method = RequestMethod.GET,
-        value = "/contenidos/visualizar/{id_de_contenido}"
-    )
-    
-    default ResponseEntity<String> contenidosVisualizarIdDeContenidoGet(
-        @Parameter(name = "id_de_contenido", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id_de_contenido") Integer idDeContenido
-    ) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+	/**
+	 * GET /contenidos/visualizar/{id_de_contenido} : Inicia el streaming del contenido.
+	 *
+	 * @param idDeContenido (required)
+	 * @return Streaming iniciado. (status code 200)
+	 * or Contenido no encontrado. (status code 404)
+	 */
+	@Operation(operationId = "contenidosVisualizarIdDeContenidoGet", summary = "Inicia el streaming del contenido.", tags = {"Contenidos"}, responses = {@ApiResponse(responseCode = "200", description = "Streaming iniciado."), @ApiResponse(responseCode = "404", description = "Contenido no encontrado.")})
+	@RequestMapping(method = RequestMethod.GET, value = "/contenidos/visualizar/{id_de_contenido}")
 
-    }
+	default ResponseEntity<String> contenidosVisualizarIdDeContenidoGet(@Parameter(name = "id_de_contenido", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id_de_contenido") Integer idDeContenido) {
+		return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+	}
 
 }

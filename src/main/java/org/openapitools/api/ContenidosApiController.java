@@ -1,5 +1,8 @@
 package org.openapitools.api;
 
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.openapitools.exceptions.CustomServiceException;
 import org.openapitools.model.Contenido;
 import org.openapitools.services.ContenidoDBService;
@@ -52,7 +55,18 @@ public class ContenidosApiController implements ContenidosApi {
         return ResponseEntity.ok(contenidosList);
     }
 
-    //Eliminar un contenido pasado su id
+    @Override
+    public ResponseEntity<List<Contenido>> contenidosEtiquetasGet(List<Integer> etiquetas) {
+        List<Contenido> contenidos = contenidoDBService.getContenidoByEtiquetaIds(etiquetas);
+
+        if (contenidos.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 204 si no hay contenidos
+        }
+
+        return new ResponseEntity<>(contenidos, HttpStatus.OK); // 200 y la lista de contenidos
+    }
+
+        //Eliminar un contenido pasado su id
     @Override
     public ResponseEntity<Void> contenidosIdDeContenidoDelete(Integer idDeContenido) {
         boolean borrado = contenidoDBService.deleteContenidoById(idDeContenido);
